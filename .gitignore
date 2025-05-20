@@ -1,7 +1,3 @@
 # Ignore sensitive files and directories
 config/.env
-data/*
-logs/*
-*.log
-*.json
-*.csv
+

@@ -1,0 +1,92 @@
+[
+  {
+    "id": 30,
+    "path": "repo-15",
+    "name": "repo-15",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-15.git"
+  },
+  {
+    "id": 29,
+    "path": "repo-14",
+    "name": "repo-14",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-14.git"
+  },
+  {
+    "id": 28,
+    "path": "repo-13",
+    "name": "repo-13",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-13.git"
+  },
+  {
+    "id": 27,
+    "path": "repo-12",
+    "name": "repo-12",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-12.git"
+  },
+  {
+    "id": 26,
+    "path": "repo-11",
+    "name": "repo-11",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-11.git"
+  },
+  {
+    "id": 25,
+    "path": "repo-10",
+    "name": "repo-10",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-10.git"
+  },
+  {
+    "id": 24,
+    "path": "repo-9",
+    "name": "repo-9",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-9.git"
+  },
+  {
+    "id": 23,
+    "path": "repo-8",
+    "name": "repo-8",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-8.git"
+  },
+  {
+    "id": 22,
+    "path": "repo-7",
+    "name": "repo-7",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-7.git"
+  },
+  {
+    "id": 21,
+    "path": "repo-6",
+    "name": "repo-6",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-6.git"
+  },
+  {
+    "id": 20,
+    "path": "repo-5",
+    "name": "repo-5",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-5.git"
+  },
+  {
+    "id": 19,
+    "path": "repo-4",
+    "name": "repo-4",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-4.git"
+  },
+  {
+    "id": 18,
+    "path": "repo-3",
+    "name": "repo-3",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-3.git"
+  },
+  {
+    "id": 17,
+    "path": "repo-2",
+    "name": "repo-2",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-2.git"
+  },
+  {
+    "id": 16,
+    "path": "repo-1",
+    "name": "repo-1",
+    "http_url_to_repo": "http://11e22328e3f0/onprem-org/repo-1.git"
+  }
+]
