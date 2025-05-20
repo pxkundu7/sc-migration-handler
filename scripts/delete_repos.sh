@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script to inventory active GitLab CE repositories
+# Script to delete repositories repo-16 to repo-50 from onprem-org in GitLab CE
 set -e
 
 # Load .env file
@@ -11,10 +11,9 @@ fi
 source "$ENV_FILE"
 
 # Validate required variables
-: "${SOURCE_ORG:?Missing SOURCE_ORG}"
 : "${GITLAB_PAT:?Missing GITLAB_PAT}"
 : "${GITLAB_HOST:?Missing GITLAB_HOST}"
-: "${DATA_DIR:?Missing DATA_DIR}"
+: "${SOURCE_ORG:?Missing SOURCE_ORG}"
 : "${LOG_DIR:?Missing LOG_DIR}"
 
 # Verify jq is installed
@@ -23,9 +22,9 @@ if ! command -v jq &> /dev/null; then
   sudo apt-get update && sudo apt-get install -y jq
 fi
 
-# Create log directory
+# Log file
 mkdir -p "$LOG_DIR"
-LOG_FILE="$LOG_DIR/inventory_$(date +%Y%m%d_%H%M%S).log"
+LOG_FILE="$LOG_DIR/delete_repos_$(date +%Y%m%d_%H%M%S).log"
 touch "$LOG_FILE"
 echo "Logging to $LOG_FILE"
 
@@ -44,19 +43,28 @@ if [[ -z "$GROUP_ID" ]]; then
 fi
 echo "Found group $SOURCE_ORG with ID: $GROUP_ID" | tee -a "$LOG_FILE"
 
-# List active, non-archived repositories
-echo "Fetching active repositories for group $SOURCE_ORG..." | tee -a "$LOG_FILE"
-PROJECTS_RESPONSE=$(curl -s -H "Private-Token: $GITLAB_PAT" "$GITLAB_HOST/api/v4/groups/$GROUP_ID/projects?per_page=100&archived=false")
-if [[ $(echo "$PROJECTS_RESPONSE" | jq -r 'type') != "array" ]]; then
-  echo "Error: Failed to fetch projects for group $SOURCE_ORG. Response: $PROJECTS_RESPONSE" | tee -a "$LOG_FILE"
-  exit 1
-fi
+# Delete repositories repo-16 to repo-50
+for i in {16..50}; do
+  REPO_NAME="repo-$i"
+  echo "Deleting $REPO_NAME..." | tee -a "$LOG_FILE"
+  
+  # Get project ID
+  PROJECT_RESPONSE=$(curl -s -H "Private-Token: $GITLAB_PAT" "$GITLAB_HOST/api/v4/projects/$SOURCE_ORG%2F$REPO_NAME")
+  PROJECT_ID=$(echo "$PROJECT_RESPONSE" | jq -r '.id')
+  
+  if [[ "$PROJECT_ID" == "null" ]]; then
+    echo "Warning: $REPO_NAME does not exist. Skipping." | tee -a "$LOG_FILE"
+    continue
+  fi
+  
+  # Delete repository
+  DELETE_RESPONSE=$(curl -s -H "Private-Token: $GITLAB_PAT" -X DELETE "$GITLAB_HOST/api/v4/projects/$PROJECT_ID")
+  if [[ -n "$DELETE_RESPONSE" && $(echo "$DELETE_RESPONSE" | jq -r '.message // empty') != "" ]]; then
+    echo "Error: Failed to delete $REPO_NAME. Response: $DELETE_RESPONSE" | tee -a "$LOG_FILE"
+    continue
+  fi
+  echo "Deleted $REPO_NAME" | tee -a "$LOG_FILE"
+  sleep 1  # Prevent API rate limit issues
+done
 
-# Filter and save inventory
-echo "$PROJECTS_RESPONSE" | jq '[.[] | select(.archived == false) | {id, path, name, http_url_to_repo}]' > "$DATA_DIR/repo_inventory.json"
-if [[ ! -s "$DATA_DIR/repo_inventory.json" ]]; then
-  echo "Error: repo_inventory.json is empty" | tee -a "$LOG_FILE"
-  exit 1
-fi
-REPO_COUNT=$(jq length "$DATA_DIR/repo_inventory.json")
-echo "Repository inventory saved to $DATA_DIR/repo_inventory.json with $REPO_COUNT repositories" | tee -a "$LOG_FILE"
+echo "Repository deletion completed. Logs saved to $LOG_FILE"
