@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SC Migration Handler - Project Showcase</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12">
+            <div class="flex justify-center space-x-4 mb-4">
+                <img src="https://img.shields.io/badge/Status-Active-brightgreen" alt="Status">
+                <img src="https://img.shields.io/badge/Repos-15-blue" alt="Total Repositories">
+                <img src="https://img.shields.io/badge/Migrated-15-green" alt="Migrated Repositories">
+                <img src="https://img.shields.io/badge/Version-1.0.0-orange" alt="Version">
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Source Code Migration Handler</h1>
+            <p class="text-xl text-gray-600">Automated GitLab to GitHub Migration Project</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-4">Project Overview</h2>
+                <p class="text-gray-700 mb-4">
+                    This project automates the migration of source code repositories from an on-premises GitLab CE instance to GitHub,
+                    ensuring a seamless transition while maintaining security and traceability.
+                </p>
+                <div class="mt-4">
+                    <h3 class="text-lg font-semibold mb-2">Key Features</h3>
+                    <ul class="list-disc list-inside text-gray-700">
+                        <li class="mb-2">
+                            <i class="fas fa-robot text-blue-500 mr-2"></i>
+                            Automated repository migration with zero downtime
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-code-branch text-green-500 mr-2"></i>
+                            Complete commit and branch preservation
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-shield-alt text-red-500 mr-2"></i>
+                            Security-focused approach with audit trails
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-chart-line text-purple-500 mr-2"></i>
+                            Comprehensive logging and tracking
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold mb-4">Migration Progress</h2>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-3xl font-bold text-blue-600" id="totalRepos">15</div>
+                        <div class="text-gray-600">Total Repositories</div>
+                    </div>
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-3xl font-bold text-green-600" id="migratedRepos">15</div>
+                        <div class="text-gray-600">Migrated Repositories</div>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <canvas id="migrationChart"></canvas>
+                </div>
+                <div class="mt-4">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2 text-center">Migration Progress: 100% Complete</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-12">
+            <h2 class="text-2xl font-semibold mb-4">Repository Status</h2>
+            <div class="mb-4">
+                <div class="flex space-x-4">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                        <i class="fas fa-check-circle mr-1"></i> Migrated (15)
+                    </span>
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                        <i class="fas fa-clock mr-1"></i> In Progress (0)
+                    </span>
+                    <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm">
+                        <i class="fas fa-exclamation-circle mr-1"></i> Failed (0)
+                    </span>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Repository</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Updated</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="repoTableBody">
+                        <!-- Repository data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">Recent Activity</h2>
+            <div class="mb-4">
+                <div class="flex space-x-4">
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        <i class="fas fa-sync mr-1"></i> Migration Events
+                    </span>
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
+                        <i class="fas fa-code mr-1"></i> Code Updates
+                    </span>
+                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">
+                        <i class="fas fa-cog mr-1"></i> System Events
+                    </span>
+                </div>
+            </div>
+            <div id="activityFeed" class="space-y-4">
+                <!-- Activity feed will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize migration chart
+        const ctx = document.getElementById('migrationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Migrated', 'Pending'],
+                datasets: [{
+                    data: [15, 0],
+                    backgroundColor: ['#10B981', '#E5E7EB'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Enhanced repository data
+        const repositories = [
+            { 
+                name: 'repo-1', 
+                status: 'Migrated', 
+                lastUpdated: '2024-03-19',
+                details: 'All branches migrated successfully'
+            },
+            { 
+                name: 'repo-2', 
+                status: 'Migrated', 
+                lastUpdated: '2024-03-19',
+                details: 'Including all commit history'
+            },
+            { 
+                name: 'repo-3', 
+                status: 'Migrated', 
+                lastUpdated: '2024-03-19',
+                details: 'Issues and MRs transferred'
+            },
+        ];
+
+        // Populate repository table with enhanced information
+        const tableBody = document.getElementById('repoTableBody');
+        repositories.forEach(repo => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <i class="fas fa-code-branch text-blue-500 mr-2"></i>${repo.name}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                        <i class="fas fa-check-circle mr-1"></i>${repo.status}
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <i class="far fa-clock text-gray-400 mr-1"></i>${repo.lastUpdated}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    ${repo.details}
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        // Enhanced activity feed
+        const activities = [
+            { 
+                type: 'Migration', 
+                description: 'Completed migration of repo-1', 
+                timestamp: '2024-03-19 14:30',
+                icon: 'fas fa-sync text-blue-500'
+            },
+            { 
+                type: 'Update', 
+                description: 'Updated migration documentation', 
+                timestamp: '2024-03-19 13:15',
+                icon: 'fas fa-file-alt text-purple-500'
+            },
+            { 
+                type: 'Migration', 
+                description: 'Completed migration of repo-2', 
+                timestamp: '2024-03-19 12:45',
+                icon: 'fas fa-sync text-blue-500'
+            },
+        ];
+
+        // Populate activity feed with enhanced styling
+        const activityFeed = document.getElementById('activityFeed');
+        activities.forEach(activity => {
+            const activityItem = document.createElement('div');
+            activityItem.className = 'border-l-4 border-blue-500 pl-4 py-2 hover:bg-gray-50 transition-colors duration-200';
+            activityItem.innerHTML = `
+                <div class="flex items-center">
+                    <i class="${activity.icon} mr-2"></i>
+                    <div class="text-sm text-gray-600">${activity.timestamp}</div>
+                </div>
+                <div class="font-medium mt-1">${activity.type}</div>
+                <div class="text-gray-700">${activity.description}</div>
+            `;
+            activityFeed.appendChild(activityItem);
+        });
+    </script>
+</body>
+</html> 
