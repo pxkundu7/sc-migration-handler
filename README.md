@@ -1,4 +1,5 @@
 # GitHub Migration Project
+[![Deploy Showcase Page](https://github.com/pxkundu7/sc-migration-handler/actions/workflows/deploy-showcase.yml/badge.svg)](https://github.com/pxkundu7/sc-migration-handler/actions/workflows/deploy-showcase.yml)
 # Source Code Migration Handler (sc-migration-handler)
 
 The `sc-migration-handler` project automates the migration of source code repositories from an on-premises GitLab CE instance to a GitHub organization. This project ensures a seamless transition of repository content (commits, branches, and optionally issues/MRs) while maintaining security, efficiency, and traceability. It is designed for organizations moving from self-hosted GitLab to GitHub.com, with a focus on reliability and DevSecOps best practices.
